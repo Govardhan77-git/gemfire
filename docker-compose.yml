@@ -1,0 +1,63 @@
+version: "3.9"
+
+networks:
+  gemfire-net:
+    driver: bridge
+
+volumes:
+  locator-data:
+  server1-data:
+  server2-data:
+
+services:
+
+  gemfire-locator:
+    image: apachegeode/geode:1.15.1
+    networks:
+      - gemfire-net
+    ports:
+      - "10334:10334"
+      - "7070:7070"
+      - "1099:1099"
+    volumes:
+      - locator-data:/data/locator
+    command: bash -c "rm -f /data/locator/*.pid && /geode/bin/gfsh start locator --name=locator1 --port=10334 --dir=/data/locator --J=-Dgemfire.http-service-port=7070 --J=-Dgemfire.jmx-manager-start=true --J=-Dgemfire.jmx-manager=true && tail -f /data/locator/locator1.log"
+
+  gemfire-server-1:
+    image: apachegeode/geode:1.15.1
+    networks:
+      - gemfire-net
+    ports:
+      - "40404:40404"
+    volumes:
+      - server1-data:/data/server1
+    depends_on:
+      - gemfire-locator
+    command: bash -c "rm -f /data/server1/*.pid && /geode/bin/gfsh start server --name=server1 --server-port=40404 --locators=gemfire-locator[10334] --dir=/data/server1 --J=-Dgemfire.statistic-sampling-enabled=true --J=-Dgemfire.log-level=warning && tail -f /data/server1/server1.log"
+
+  gemfire-server-2:
+    image: apachegeode/geode:1.15.1
+    networks:
+      - gemfire-net
+    ports:
+      - "40405:40404"
+    volumes:
+      - server2-data:/data/server2
+    depends_on:
+      - gemfire-server-1
+    command: bash -c "rm -f /data/server2/*.pid && /geode/bin/gfsh start server --name=server2 --server-port=40404 --locators=gemfire-locator[10334] --dir=/data/server2 --J=-Dgemfire.statistic-sampling-enabled=true --J=-Dgemfire.log-level=warning && tail -f /data/server2/server2.log"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - gemfire-net
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_GEMFIRE_POOL_LOCATORS=gemfire-locator[10334]
+      - SPRING_DATA_GEMFIRE_CACHE_LOG_LEVEL=warning
+    depends_on:
+      - gemfire-server-1
+    restart: on-failure
