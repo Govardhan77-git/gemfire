@@ -39,11 +39,11 @@ public class ProductContinuousQueryListener {
                 new CqListener() {
                     @Override
                     public void onEvent(CqEvent event) {
-                        log.info("🔔 [CQ - High Value] Op={} | Key={}", event.getQueryOperation(), event.getKey());
+                        log.info("[CQ - High Value] Op={} | Key={}", event.getQueryOperation(), event.getKey());
                     }
                     @Override
                     public void onError(CqEvent event) {
-                        log.error("❌ [CQ - High Value] Error: {}", event.getThrowable().getMessage());
+                        log.error("[CQ - High Value] Error: {}", event.getThrowable().getMessage());
                     }
                     @Override
                     public void close() {
@@ -60,7 +60,7 @@ public class ProductContinuousQueryListener {
                     }
                     @Override
                     public void onError(CqEvent event) {
-                        log.error("❌ [CQ - Out of Stock] Error: {}", event.getThrowable().getMessage());
+                        log.error("[CQ - Out of Stock] Error: {}", event.getThrowable().getMessage());
                     }
                     @Override
                     public void close() {
@@ -73,19 +73,19 @@ public class ProductContinuousQueryListener {
                 new CqListener() {
                     @Override
                     public void onEvent(CqEvent event) {
-                        log.info("⭐ [CQ - Featured] Op={} | Key={}", event.getQueryOperation(), event.getKey());
+                        log.info("[CQ - Featured] Op={} | Key={}", event.getQueryOperation(), event.getKey());
                     }
                     @Override
                     public void onError(CqEvent event) {
-                        log.error("❌ [CQ - Featured] Error: {}", event.getThrowable().getMessage());
+                        log.error("[CQ - Featured] Error: {}", event.getThrowable().getMessage());
                     }
                     @Override
                     public void close() {
-                        log.info("🔒 [CQ - Featured] Closed");
+                        log.info("[CQ - Featured] Closed");
                     }
                 });
 
-        log.info("✅ Registered 3 GemFire Continuous Queries");
+        log.info("Registered 3 GemFire Continuous Queries");
     }
 
     private void registerCq(QueryService qs, String name, String query, CqListener listener) {
@@ -99,9 +99,9 @@ public class ProductContinuousQueryListener {
             cqFactory.addCqListener(listener);
             CqQuery cq = qs.newCq(name, query, cqFactory.create());
             cq.execute();
-            log.info("  ✔ CQ registered: {}", name);
+            log.info("CQ registered: {}", name);
         } catch (Exception e) {
-            log.warn("  ⚠ CQ '{}' skipped: {}", name, e.getMessage());
+            log.warn("CQ '{}' skipped: {}", name, e.getMessage());
         }
     }
 }

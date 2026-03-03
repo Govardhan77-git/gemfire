@@ -38,7 +38,7 @@ public class GemFireCacheConfig {
                 .setPdxReadSerialized(false)
                 .setPdxIgnoreUnreadFields(true);
         Cache cache = factory.create();
-        log.info("✅ GemFire embedded peer Cache created");
+        log.info("GemFire embedded peer Cache created");
         return cache;
     }
 
@@ -54,7 +54,7 @@ public class GemFireCacheConfig {
         rf.addCacheListener(cacheListener);
         rf.setEntryIdleTimeout(new ExpirationAttributes(600, ExpirationAction.INVALIDATE));
         Region<String, Product> region = rf.create("Products");
-        log.info("✅ GemFire Region /Products [REPLICATE | idle TTL=600s | CacheListener]");
+        log.info("GemFire Region /Products [REPLICATE | idle TTL=600s | CacheListener]");
         return region;
     }
 
@@ -68,7 +68,7 @@ public class GemFireCacheConfig {
         RegionFactory<String, Object> rf = cache.createRegionFactory(RegionShortcut.PARTITION);
         rf.setStatisticsEnabled(true);
         Region<String, Object> region = rf.create("Orders");
-        log.info("✅ GemFire Region /Orders [PARTITION | HA via 2-server cluster]");
+        log.info("GemFire Region /Orders [PARTITION | HA via 2-server cluster]");
         return region;
     }
 
@@ -83,7 +83,7 @@ public class GemFireCacheConfig {
         rf.setStatisticsEnabled(true);
         rf.setEntryTimeToLive(new ExpirationAttributes(1800, ExpirationAction.DESTROY));
         Region<String, Object> region = rf.create("Sessions");
-        log.info("✅ GemFire Region /Sessions [LOCAL | absolute TTL=1800s]");
+        log.info("GemFire Region /Sessions [LOCAL | absolute TTL=1800s]");
         return region;
     }
 
@@ -119,7 +119,7 @@ public class GemFireCacheConfig {
         rf.setDiskSynchronous(true);
 
         Region<String, Object> region = rf.create("Audit");
-        log.info("✅ GemFire Region /Audit [REPLICATE_PERSISTENT | DiskStore | SYNC writes]");
+        log.info("GemFire Region /Audit [REPLICATE_PERSISTENT | DiskStore | SYNC writes]");
         return region;
     }
 }

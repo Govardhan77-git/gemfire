@@ -33,7 +33,7 @@ public class ProductCacheListener extends CacheListenerAdapter<String, Product> 
     @Override
     public void afterCreate(EntryEvent<String, Product> event) {
         Product product = event.getNewValue();
-        log.info("📥 [Cache Event] CREATED | Key={} | Product={} | Active={} | InStock={}",
+        log.info("[Cache Event] CREATED | Key={} | Product={} | Active={} | InStock={}",
                 event.getKey(),
                 product != null ? product.getName() : "null",
                 product != null ? product.getActive() : "null",
@@ -44,7 +44,7 @@ public class ProductCacheListener extends CacheListenerAdapter<String, Product> 
     public void afterUpdate(EntryEvent<String, Product> event) {
         Product oldVal = event.getOldValue();
         Product newVal = event.getNewValue();
-        log.info("✏️ [Cache Event] UPDATED | Key={} | OldPrice={} | NewPrice={}",
+        log.info("[Cache Event] UPDATED | Key={} | OldPrice={} | NewPrice={}",
                 event.getKey(),
                 oldVal != null ? oldVal.getPrice() : "null",
                 newVal != null ? newVal.getPrice() : "null");
@@ -52,17 +52,17 @@ public class ProductCacheListener extends CacheListenerAdapter<String, Product> 
 
     @Override
     public void afterDestroy(EntryEvent<String, Product> event) {
-        log.info("🗑️ [Cache Event] DELETED | Key={}", event.getKey());
+        log.info("[Cache Event] DELETED | Key={}", event.getKey());
     }
 
     @Override
     public void afterInvalidate(EntryEvent<String, Product> event) {
         // Fires when TTL expires (INVALIDATE action)
-        log.info("⏰ [Cache Event] TTL EXPIRED (INVALIDATED) | Key={}", event.getKey());
+        log.info("[Cache Event] TTL EXPIRED (INVALIDATED) | Key={}", event.getKey());
     }
 
     @Override
     public void afterRegionClear(RegionEvent<String, Product> event) {
-        log.warn("🧹 [Cache Event] REGION CLEARED | Region={}", event.getRegion().getName());
+        log.warn("[Cache Event] REGION CLEARED | Region={}", event.getRegion().getName());
     }
 }

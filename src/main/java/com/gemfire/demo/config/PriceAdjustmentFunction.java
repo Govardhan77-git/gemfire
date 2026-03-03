@@ -39,7 +39,7 @@ public class PriceAdjustmentFunction implements Function<Object> {
     @PostConstruct
     public void register() {
         FunctionService.registerFunction(this);
-        log.info("✅ GemFire Function registered: {}", FUNCTION_ID);
+        log.info("GemFire Function registered: {}", FUNCTION_ID);
     }
 
     @Override

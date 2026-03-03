@@ -61,7 +61,7 @@ public class TransactionService {
         CacheTransactionManager txManager = cache.getCacheTransactionManager();
 
         txManager.begin();
-        log.info("🔄 [Transaction] BEGIN — transferring {} units from {} to {}", quantity, fromProductId, toProductId);
+        log.info("[Transaction] BEGIN — transferring {} units from {} to {}", quantity, fromProductId, toProductId);
 
         try {
             // ── Read both products inside the transaction ─────────────────────
@@ -102,7 +102,7 @@ public class TransactionService {
 
             // ── Commit — all changes go live atomically ───────────────────────
             txManager.commit();
-            log.info("✅ [Transaction] COMMIT — transfer complete");
+            log.info("[Transaction] COMMIT — transfer complete");
 
             return Map.of(
                     "status", "COMMITTED",
@@ -116,12 +116,12 @@ public class TransactionService {
 
         } catch (CommitConflictException cce) {
             // Optimistic concurrency conflict — another thread updated same entries
-            log.warn("⚠️ [Transaction] CONFLICT — rolling back: {}", cce.getMessage());
+            log.warn("[Transaction] CONFLICT — rolling back: {}", cce.getMessage());
             if (txManager.exists()) txManager.rollback();
             throw new IllegalStateException("Transaction conflict — please retry: " + cce.getMessage());
 
         } catch (Exception e) {
-            log.error("❌ [Transaction] ERROR — rolling back: {}", e.getMessage());
+            log.error("[Transaction] ERROR — rolling back: {}", e.getMessage());
             if (txManager.exists()) txManager.rollback();
             throw e;
         }
@@ -136,7 +136,7 @@ public class TransactionService {
         CacheTransactionManager txManager = cache.getCacheTransactionManager();
 
         txManager.begin();
-        log.info("🔄 [Transaction] BEGIN — bulk setActive={} for category={}", active, category);
+        log.info("[Transaction] BEGIN — bulk setActive={} for category={}", active, category);
 
         try {
             int count = 0;
@@ -150,11 +150,11 @@ public class TransactionService {
                 }
             }
             txManager.commit();
-            log.info("✅ [Transaction] COMMIT — updated {} products", count);
+            log.info("[Transaction] COMMIT — updated {} products", count);
             return Map.of("status", "COMMITTED", "category", category, "active", active, "updatedCount", count);
 
         } catch (Exception e) {
-            log.error("❌ [Transaction] ROLLBACK: {}", e.getMessage());
+            log.error("[Transaction] ROLLBACK: {}", e.getMessage());
             if (txManager.exists()) txManager.rollback();
             throw e;
         }

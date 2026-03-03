@@ -202,7 +202,7 @@ public class ProductService {
             products.put(id, p);
         }
         productRepository.saveAll(products);
-        log.info("✅ Seeded {} products via GemFire putAll", products.size());
+        log.info("Seeded {} products via GemFire putAll", products.size());
         return products.size();
     }
 }

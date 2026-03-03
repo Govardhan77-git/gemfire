@@ -47,7 +47,7 @@ public class ProductRepository {
     /** GemFire Feature: putAll — inserts all entries in a single network hop */
     public void saveAll(Map<String, Product> products) {
         productsRegion.putAll(products);
-        log.info("✅ GemFire putAll — {} products stored in one network hop", products.size());
+        log.info("GemFire putAll — {} products stored in one network hop", products.size());
     }
 
     public Optional<Product> findById(String id) {
